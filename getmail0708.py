@@ -36,6 +36,7 @@ def get_mail():#获取邮件标题、发件箱。从邮箱下载附件,并保存
         else:
             print('没有新邮件')
         timer=threading.Timer(43200,get_mail)
+        print('get_mail run after 43200 seconds')
         timer.start()
     except Exception as e:
         print(e)
