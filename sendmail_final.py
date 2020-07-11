@@ -37,8 +37,8 @@ def search_data(conn,sql,sheet):
     #print('search_data end')
 def send_mail(to,dt,filelist):
     #print('send_mail start')
-    from_addr='535992954@qq.com'
-    psw='zlalwlbmulkqbihc'
+    from_addr='44122331@qq.com'
+    psw='xxxxxx'
     smtp_server='smtp.qq.com'
     msg=MIMEMultipart('mixed')
     msg['From']=from_addr
@@ -78,7 +78,7 @@ def count_second():#计算下次运行时间
     return interval_time,next_day
 def shao():
     try:
-        conn=cx_Oracle.connect('szsrk/csrk#2014@2.34.202.135:1521/csxsm')
+        conn=cx_Oracle.connect('admin/pass@127.0.0.1:1521/xx')
         today=datetime.datetime.now().strftime('%Y-%m-%d')
         sql1="select t3.jdname,t3.pcsname,t3.name,t2.姓名,t2.居民证号,case t2.性别 when '1' then '男' when '2' then '女' else '' end 性别,(2020 -substr(t2.出生日期,1,4)) 年龄,t2.个人联系电话,t6.mc 户籍,t2.服务处所,t1.address  暂住地址,t2.上传时间  from (select * from szsrk.web_czfw_sj where 是否最新 = '0' and 变动原因 != '200') t1,szsrk.web_zzrk_sj t2,(select * from csxsm.dict_sqxx where sfyx='0') t3,(select flh dm, mc, mnemonic from dm.wpa_dicts_codes t where t.dmlb = '24' order by t.flh) t6 where to_char(t2.上传时间, 'yyyy-mm-dd') =to_char(sysdate-1,'yyyy-mm-dd')  and t2.cjlx = '1' and t2.社区代码 = t1.社区代码 and t1.出租屋编号 = t2.出租屋编号 and t2.社区代码 = t3.url and t2.户籍地址 = t6.dm  and t2.户籍地址 like '42%' and t2.户籍地址 not like '4201%' order by t3.jdname, t3.pcsname, t3.name"
         sql2="select t3.jdname,t3.pcsname,t3.name,t2.姓名,t2.居民证号,case t2.性别 when '1' then '男' when '2' then '女' else '' end 性别,(2020 -substr(t2.出生日期,1,4)) 年龄,t2.个人联系电话,t6.mc 户籍,t2.服务处所,t1.address  暂住地址,t2.上传时间  from (select * from szsrk.web_czfw_sj where 是否最新 = '0' and 变动原因 != '200') t1,szsrk.web_zzrk_sj t2,(select * from csxsm.dict_sqxx where sfyx='0') t3,(select flh dm, mc, mnemonic from dm.wpa_dicts_codes t where t.dmlb = '24' order by t.flh) t6 where to_char(t2.上传时间, 'yyyy-mm-dd') =to_char(sysdate-1,'yyyy-mm-dd')  and t2.cjlx = '1' and t2.社区代码 = t1.社区代码 and t1.出租屋编号 = t2.出租屋编号 and t2.社区代码 = t3.url and t2.户籍地址 = t6.dm  and t2.户籍地址 like '4201%'  order by t3.jdname, t3.pcsname, t3.name"
@@ -112,7 +112,7 @@ def shao():
 def xufeng(next_day):
     if next_day=='1':
         try:
-            conn=cx_Oracle.connect('szsrk/csrk#2014@2.34.202.135:1521/csxsm')
+            conn=cx_Oracle.connect('admin/pass@127.0.0.1:1521/xx')
             today=datetime.datetime.now().strftime('%Y-%m-%d')
             yestoday=(datetime.datetime.now()+datetime.timedelta(days=-1)).strftime('%Y-%m')
             sql1="select t5.jdname,t5.pcsname,t5.name,t1.姓名,t1.居民证号,t2.mc 户籍,t4.address,t1.个人联系电话 from csxsm.cs_zzrk_sj_1 t1,(select flh dm, mc, mnemonic from dm.wpa_dicts_codes t where t.dmlb = '24' order by t.flh) t2,(select * from szsrk.web_czfw_sj where 是否最新 = '0' and 变动原因 != '200') t4,(select * from csxsm.dict_sqxx where sfyx='0') t5 where t1.出租屋编码 = t4.社区代码 || t4.出租屋编号 and t1.户籍地址 = t2.dm and t1.是否注销 = '0' and t4.社区代码 = t5.url and 是否精神病 = '1' order by t5.jdname, t5.pcsname, t5.name"
@@ -156,7 +156,7 @@ def xufeng(next_day):
 def lizd(next_day):
     if next_day=='1':
         try:
-            conn=cx_Oracle.connect('szsrk/csrk#2014@2.34.202.135:1521/csxsm')
+            conn=cx_Oracle.connect('admin/pass@127.0.0.1:1521/xx')
             today=datetime.datetime.now().strftime('%Y-%m-%d')
             yestoday=(datetime.datetime.now()+datetime.timedelta(days=-1)).strftime('%Y-%m-%d')
             yyear,ymonth,yday=yestoday.split('-')
