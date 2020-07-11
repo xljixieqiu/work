@@ -37,8 +37,8 @@ def search_data(conn,sql,sheet):
     #print('search_data end')
 def send_mail(to,dt,filelist):
     #print('send_mail start')
-    from_addr='44122331@qq.com'
-    psw='xxxxxx'
+    from_addr='youmail@qq.com'
+    psw='yourpassword'
     smtp_server='smtp.qq.com'
     msg=MIMEMultipart('mixed')
     msg['From']=from_addr
