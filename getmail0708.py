@@ -115,7 +115,7 @@ def get_data(file_lists):#从附件路径读取excel，获取excel内容，并up
                         res=check_account(count)
                         if res==1:#检查账号是否符合规定
                             #print('辅警账号')
-                            if subtpye=='新增' or subtpye=='修改':
+                            if subtpye=='新增' or subtpye=='变更':
                                 if check_oracle(count,conn):#检查账号是否存在于数据库
                                     update_oracle1(pcs,count,cname,conn)
                                 else:
@@ -131,7 +131,7 @@ def get_data(file_lists):#从附件路径读取excel，获取excel内容，并up
                                 errorcount+=1
                         elif res==2:
                             #print('民警账号')
-                            if subtpye=='新增' or subtpye=='修改':
+                            if subtpye=='新增' or subtpye=='变更':
                                 if check_oracle(count,conn):#检查账号是否存在于数据库
                                     update_oracle2(pcs,count,cname,conn)
                                 else:
@@ -264,7 +264,9 @@ def delete_oracle(count,conn):#删除账号
         conn.rollback()
     finally:
         c.close()
-def data_clean(str):#清理excel数据
+def data_clean(str1):#清理excel数据
+    if isinstance(str1,float):
+        str1=str(int(str1))#excel单元格中纯数字的类型为float，需要强制转换成int类型（去掉小数点），在转换为str类型（strip（）方法只有str才有）
     return str.strip()
 def move_file(from_path,to_path):#移动文件到指定文件夹
     if not os.path.isfile(from_path):
