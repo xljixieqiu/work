@@ -121,11 +121,7 @@ def get_data(file_lists):#从附件路径读取excel，获取excel内容，并up
                                 else:
                                     insert_oracle1(pcs,count,cname,conn)
                             elif subtpye=='注销':
-                                if check_account(count,conn):
-                                    delete_oracle(count,conn)
-                                else:
-                                    print('文件%s的%s账号%s不存在，无法注销'%(workbookname,name,count))
-                                    errorcount+=1
+                                delete_oracle(count,conn)
                             else:
                                 print('文件%s的%s账号%s申请类型错误'%(workbookname,name,count))
                                 errorcount+=1
@@ -137,11 +133,7 @@ def get_data(file_lists):#从附件路径读取excel，获取excel内容，并up
                                 else:
                                     insert_oracle2(pcs,count,cname,conn)
                             elif subtpye=='注销':
-                                if check_account(count,conn):
-                                    delete_oracle(count,conn)
-                                else:
-                                    print('文件%s的%s账号%s不存在，无法注销'%(workbookname,name,count))
-                                    errorcount+=1
+                                delete_oracle(count,conn)
                             else:
                                 print('文件%s的%s账号%s申请类型错误'%(workbookname,name,count))
                                 errorcount+=1
