@@ -1,5 +1,7 @@
 import tkinter,xlrd,xlwt,cx_Oracle
 from tkinter import filedialog
+loops=[7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2]#idcheck所需
+checknum=[1,0,'X',9,8,7,6,5,4,3,2]#idcheck所需
 def id_check(arg,nrow):
     s=list(arg)
     #l=''
@@ -28,13 +30,25 @@ def upload_file():
     root=tkinter.Tk()
     root.withdraw()
     filepath=filedialog.askopenfilename()
-    return filepath
-def get_data(id,conn,nrow):
-    sql="select t3.jdname,t3.pcsname,t3.name,t2.姓名,t2.居民证号,t2.个人联系电话,t6.mc 户籍,t2.服务处所,t1.address 暂住地址,t2.是否注销,t2.上传时间  from (select * from szsrk.web_czfw_sj where 是否最新 = '0') t1,csxsm.cs_zzrk_sj_1 t2,(select * from csxsm.dict_sqxx where sfyx='0') t3,(select flh dm, mc, mnemonic  from dm.wpa_dicts_codes t  where t.dmlb = '24' ) t6 where   t2.出租屋编码 = t1.社区代码 || t1.出租屋编号   and t2.社区代码 = t3.url   and t2.户籍地址 = t6.dm and t2.居民证号='%s'"%idnum
+    filesuffix=filepath.split('.')[-1]
+    if filesuffix=='xls' or filesuffix=='xlsx':
+        return filepath
+    else:
+        print('请选择一个excel文件')
+        sys.exit()
+def get_data(idnum,conn,nrow,worksheet):
+    sql="select t3.jdname,t3.pcsname,t3.name,t2.姓名,t2.居民证号,t2.个人联系电话,t6.mc 户籍,t2.服务处所,t1.address 暂住地址,t2.是否注销,t2.上传时间  from (select * from szsrk.web_czfw_sj where 是否最新 = '0') t1,csxsm.cs_zzrk_sj_1 t2,(select * from csxsm.dict_sqxx where sfyx='0') t3,(select flh dm, mc, mnemonic  from dm.wpa_dicts_codes t  where t.dmlb = '24' ) t6 where   t2.出租屋编码 = t1.社区代码 || t1.出租屋编号 and t2.社区代码= t3.url and t2.户籍地址 = t6.dm and t2.居民证号='%s'"%idnum
     c=conn.cursor()
     x=c.execute(sql)
-    restult=x.fechall()
+    result=x.fetchall()
     j=0
+    z=0
+    if nrow==1:
+        #headlist=[]
+        head_index=c.description
+        for index in head_index:
+            worksheet.write(0,z,index[0])
+            z+=1
     if result:
         for res in result[0]:
             worksheet.write(nrow,j,str(res))
@@ -45,10 +59,9 @@ def get_data(id,conn,nrow):
 def main():
     try:
         path=upload_file()#获取需比对数据的文件路径
-        loops=[7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2]#idcheck所需
-        checknum=[1,0,'X',9,8,7,6,5,4,3,2]#idcheck所需
         workbook1=xlrd.open_workbook(r'%s'%path)
-        conn=cx_Oracle.connect('user/password@server:post/pid')
+        conn=cx_Oracle.connect('user/password@server:port/pid')
+        print('conn is established')
         workbook2=xlwt.Workbook()#写入的excel
         worksheet=workbook2.add_sheet('sheet1')
         sheetnames=workbook1.sheet_names()#获取所有sheetname
@@ -60,7 +73,7 @@ def main():
                     idnum=sheet.cell_value(i,1)
                     idnum=clean_data(idnum)
                     id_check(idnum,i)
-                    get_data(idnum,conn,i)
+                    get_data(idnum,conn,i,worksheet)
         workbook2.save('result.xls')
     except Exception as e:
         print(e)
